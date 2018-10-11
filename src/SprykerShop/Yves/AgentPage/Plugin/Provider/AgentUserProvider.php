@@ -10,6 +10,7 @@ namespace SprykerShop\Yves\AgentPage\Plugin\Provider;
 use Generated\Shared\Transfer\UserTransfer;
 use Spryker\Yves\Kernel\AbstractPlugin;
 use SprykerShop\Yves\AgentPage\Security\Agent;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -46,7 +47,7 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
     public function refreshUser(UserInterface $user)
     {
         if (!$user instanceof Agent) {
-            return $user;
+            throw new UnsupportedUserException('Only agents are supported by this user provider');
         }
 
         $userTransfer = $this->getUserTransfer($user);
