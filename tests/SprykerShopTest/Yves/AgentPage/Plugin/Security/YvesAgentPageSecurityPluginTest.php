@@ -9,12 +9,15 @@ namespace SprykerShopTest\Yves\AgentPage\Plugin\Security;
 
 use Codeception\Stub;
 use Codeception\Test\Unit;
+use ReflectionClass;
 use Spryker\Client\Storage\StorageDependencyProvider;
 use Spryker\Client\StorageRedis\Plugin\StorageRedisPlugin;
+use Spryker\Service\Container\ContainerInterface;
 use Spryker\Yves\Messenger\FlashMessenger\FlashMessengerInterface;
-use SprykerShop\Yves\AgentPage\Plugin\Security\AgentPageSecurityPlugin;
+use Spryker\Yves\Security\Configurator\SecurityConfigurator;
+use SprykerShop\Yves\AgentPage\Plugin\Security\YvesAgentPageSecurityPlugin;
 use SprykerShop\Yves\CustomerPage\CustomerPageDependencyProvider;
-use SprykerShop\Yves\CustomerPage\Plugin\Security\CustomerPageSecurityPlugin;
+use SprykerShop\Yves\CustomerPage\Plugin\Security\YvesCustomerPageSecurityPlugin;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -22,13 +25,31 @@ use Symfony\Component\HttpFoundation\Response;
  * @group Yves
  * @group AgentPage
  * @group Plugin
- * @group AgentPageSecurityPluginTest
+ * @group YvesAgentPageSecurityPluginTest
  */
-class AgentPageSecurityPluginTest extends Unit
+class YvesAgentPageSecurityPluginTest extends Unit
 {
     /**
-     * @uses \Spryker\Yves\Security\Plugin\Application\SecurityApplicationPlugin::SERVICE_SECURITY_AUTHORIZATION_CHECKER
-     *
+     * @var string
+     */
+    protected const SECURITY_TOKEN_STORAGE_SERVICE = 'security.token_storage';
+
+    /**
+     * @var string
+     */
+    protected const ACCESS_MODE_PUBLIC = 'PUBLIC_ACCESS';
+
+    /**
+     * @var string
+     */
+    protected const AUTHENTICATED = 'AUTHENTICATED';
+
+    /**
+     * @var string
+     */
+    protected const IS_AUTHENTICATED_FULLY = 'IS_AUTHENTICATED_FULLY';
+
+    /**
      * @var string
      */
     protected const SERVICE_SECURITY_AUTHORIZATION_CHECKER = 'security.authorization_checker';
@@ -59,35 +80,38 @@ class AgentPageSecurityPluginTest extends Unit
     {
         parent::setUp();
 
-        if ($this->tester->isSymfonyVersion5() !== true) {
-            $this->markTestSkipped('Compatible only with `symfony/security-core` package version ^5.0.0. To be removed once Symfony 5 support is discontinued.');
+        if ($this->tester->isSymfonyVersion5() === true) {
+            $this->markTestSkipped('Compatible only with `symfony/security-core` package version >= 6. Will be enabled by default once Symfony 5 support is discontinued.');
         }
 
         $container = $this->tester->getContainer();
         $container->set(static::SERVICE_FLASH_MESSENGER, function () {
             return Stub::makeEmpty(FlashMessengerInterface::class);
         });
+
         $this->tester->setDependency(StorageDependencyProvider::PLUGIN_STORAGE, new StorageRedisPlugin());
         $this->tester->setDependency(CustomerPageDependencyProvider::PLUGIN_APPLICATION, $container);
 
         $this->tester->addRoute('home', '/', function () use ($container) {
-            $user = $container->get('security.token_storage')->getToken()->getUser();
-
-            $content = is_object($user) ? $user->getUsername() : 'ANONYMOUS';
-
-            if ($container->get(static::SERVICE_SECURITY_AUTHORIZATION_CHECKER)->isGranted('IS_AUTHENTICATED_FULLY')) {
-                $content .= 'AUTHENTICATED';
-            }
-
-            return new Response($content);
+            return $this->createResponse($container);
         });
 
         $this->tester->addRoute('login', '/login', function () {
             return new Response('loginpage');
         });
-        $this->tester->addRoute('agent/login', '/agent/login', function () {
-            return new Response('agent/loginpage');
+
+        $this->tester->addRoute('agent/login', '/agent/login', function () use ($container) {
+            return $this->createResponse($container);
         });
+
+        $this->tester->addRoute('agent/overview', '/agent/overview', function () use ($container) {
+            return $this->createResponse($container);
+        });
+
+        $reflection = new ReflectionClass(SecurityConfigurator::class);
+        $property = $reflection->getProperty('securityConfiguration');
+        $property->setAccessible(true);
+        $property->setValue(null);
     }
 
     /**
@@ -95,22 +119,27 @@ class AgentPageSecurityPluginTest extends Unit
      */
     public function testAgentCanLogin(): void
     {
+        // Arrange
         $container = $this->tester->getContainer();
         $userTransfer = $this->tester->haveRegisteredAgent(['password' => 'foo']);
 
-        $securityPlugin = new AgentPageSecurityPlugin();
+        $securityPlugin = new YvesAgentPageSecurityPlugin();
         $securityPlugin->setFactory($this->tester->getFactory());
         $this->tester->addSecurityPlugin($securityPlugin);
-        $this->tester->addSecurityPlugin(new CustomerPageSecurityPlugin());
+        $this->tester->addSecurityPlugin(new YvesCustomerPageSecurityPlugin());
+        $this->tester->mockSecurityDependencies();
+        $this->tester->enableSecurityApplicationPlugin();
 
         $container->get(static::SERVICE_SESSION)->start();
 
+        // Act
         $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
         $httpKernelBrowser->request('get', '/');
         $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'foo']]);
         $httpKernelBrowser->followRedirect();
 
-        $this->assertSame($userTransfer->getUsername() . 'AUTHENTICATED', $httpKernelBrowser->getResponse()->getContent());
+        // Assert
+        $this->assertSame($userTransfer->getUsername() . static::AUTHENTICATED, $httpKernelBrowser->getResponse()->getContent());
     }
 
     /**
@@ -118,22 +147,27 @@ class AgentPageSecurityPluginTest extends Unit
      */
     public function testAgentIsRedirectedOnAuthenticationFailure(): void
     {
+        // Arrange
         $container = $this->tester->getContainer();
         $userTransfer = $this->tester->haveRegisteredAgent(['password' => 'foo']);
 
-        $securityPlugin = new AgentPageSecurityPlugin();
+        $securityPlugin = new YvesAgentPageSecurityPlugin();
         $securityPlugin->setFactory($this->tester->getFactory());
         $this->tester->addSecurityPlugin($securityPlugin);
-        $this->tester->addSecurityPlugin(new CustomerPageSecurityPlugin());
+        $this->tester->addSecurityPlugin(new YvesCustomerPageSecurityPlugin());
+        $this->tester->mockSecurityDependencies();
+        $this->tester->enableSecurityApplicationPlugin();
 
         $container->get(static::SERVICE_SESSION)->start();
 
+        // Act
         $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
         $httpKernelBrowser->request('get', '/');
         $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'bar']]);
         $httpKernelBrowser->followRedirect();
 
-        $this->assertSame('ANONYMOUS', $httpKernelBrowser->getResponse()->getContent());
+        // Assert
+        $this->assertSame(static::ACCESS_MODE_PUBLIC, $httpKernelBrowser->getResponse()->getContent());
     }
 
     /**
@@ -141,17 +175,21 @@ class AgentPageSecurityPluginTest extends Unit
      */
     public function testAgentCanSwitchUser(): void
     {
+        // Arrange
         $container = $this->tester->getContainer();
         $customerTransfer = $this->tester->haveCustomer(['username' => 'user', 'password' => 'foo']);
         $userTransfer = $this->tester->haveRegisteredAgent(['password' => 'foo']);
 
-        $securityPlugin = new AgentPageSecurityPlugin();
+        $securityPlugin = new YvesAgentPageSecurityPlugin();
         $securityPlugin->setFactory($this->tester->getFactory());
         $this->tester->addSecurityPlugin($securityPlugin);
-        $this->tester->addSecurityPlugin(new CustomerPageSecurityPlugin());
+        $this->tester->addSecurityPlugin(new YvesCustomerPageSecurityPlugin());
+        $this->tester->mockSecurityDependencies();
+        $this->tester->enableSecurityApplicationPlugin();
 
         $container->get(static::SERVICE_SESSION)->start();
 
+        // Act
         $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
         $httpKernelBrowser->request('get', '/');
         $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'foo']]);
@@ -159,7 +197,8 @@ class AgentPageSecurityPluginTest extends Unit
         $httpKernelBrowser->request('get', '/?_switch_user=' . $customerTransfer->getEmail());
         $httpKernelBrowser->followRedirect();
 
-        $this->assertSame($customerTransfer->getEmail() . 'AUTHENTICATED', $httpKernelBrowser->getResponse()->getContent());
+        // Assert
+        $this->assertSame($customerTransfer->getEmail() . static::AUTHENTICATED, $httpKernelBrowser->getResponse()->getContent());
     }
 
     /**
@@ -174,10 +213,12 @@ class AgentPageSecurityPluginTest extends Unit
         $this->tester->getLocator()->user()->facade()->deactivateUser($userTransfer->getIdUser());
 
         // Act
-        $securityPlugin = new AgentPageSecurityPlugin();
+        $securityPlugin = new YvesAgentPageSecurityPlugin();
         $securityPlugin->setFactory($this->tester->getFactory());
         $this->tester->addSecurityPlugin($securityPlugin);
-        $this->tester->addSecurityPlugin(new CustomerPageSecurityPlugin());
+        $this->tester->addSecurityPlugin(new YvesCustomerPageSecurityPlugin());
+        $this->tester->mockSecurityDependencies();
+        $this->tester->enableSecurityApplicationPlugin();
 
         $container->get(static::SERVICE_SESSION)->start();
 
@@ -187,6 +228,27 @@ class AgentPageSecurityPluginTest extends Unit
         $httpKernelBrowser->followRedirect();
 
         // Assert
-        $this->assertSame('ANONYMOUS', $httpKernelBrowser->getResponse()->getContent());
+        $this->assertSame(static::ACCESS_MODE_PUBLIC, $httpKernelBrowser->getResponse()->getContent());
+    }
+
+    /**
+     * @param \Spryker\Service\Container\ContainerInterface $container
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function createResponse(ContainerInterface $container): Response
+    {
+        if (!$container->has(static::SECURITY_TOKEN_STORAGE_SERVICE)) {
+                return new Response(static::ACCESS_MODE_PUBLIC);
+        }
+
+        $token = $container->get(static::SECURITY_TOKEN_STORAGE_SERVICE)->getToken();
+        $content = $token ? $token->getUser()->getUserIdentifier() : static::ACCESS_MODE_PUBLIC;
+
+        if ($container->get(static::SERVICE_SECURITY_AUTHORIZATION_CHECKER)->isGranted(static::IS_AUTHENTICATED_FULLY)) {
+            $content .= static::AUTHENTICATED;
+        }
+
+        return new Response($content);
     }
 }
