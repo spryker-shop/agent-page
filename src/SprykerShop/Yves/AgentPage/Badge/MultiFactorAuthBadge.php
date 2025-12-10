@@ -7,15 +7,17 @@
 
 namespace SprykerShop\Yves\AgentPage\Badge;
 
+use Generated\Shared\Transfer\MultiFactorAuthTransfer;
 use Generated\Shared\Transfer\MultiFactorAuthValidationRequestTransfer;
 use Generated\Shared\Transfer\UserTransfer;
+use SprykerShop\Yves\AgentPageExtension\Dependency\Plugin\AuthenticationCodeInvalidatorPluginInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\BadgeInterface;
 
 class MultiFactorAuthBadge implements BadgeInterface
 {
     /**
-     * @uses \Spryker\Yves\MultiFactorAuth\Plugin\AuthenticationHandler\User\AgentUserMultiFactorAuthenticationHandlerPlugin::AGENT_USER_MULTI_FACTOR_AUTHENTICATION_HANDLER_NAME
+     * @uses \Spryker\Yves\MultiFactorAuth\Plugin\AuthenticationHandler\Agent\AgentUserMultiFactorAuthenticationHandlerPlugin::AGENT_USER_MULTI_FACTOR_AUTHENTICATION_HANDLER_NAME
      *
      * @var string
      */
@@ -123,13 +125,22 @@ class MultiFactorAuthBadge implements BadgeInterface
                 continue;
             }
 
-            $multiFactorAuthValidationRequestTransfer = (new MultiFactorAuthValidationRequestTransfer())->setUser($userTransfer);
+            $multiFactorAuthValidationRequestTransfer = (new MultiFactorAuthValidationRequestTransfer())
+                ->setUser($userTransfer)
+                ->setIsLogin(true);
             $multiFactorAuthValidationResponseTransfer = $plugin->validateAgentMultiFactorStatus($multiFactorAuthValidationRequestTransfer);
 
-            if ($multiFactorAuthValidationResponseTransfer->getIsRequired() === true && $this->isRequestCorrupted($request)) {
-                $this->setIsResolved(false);
+            if ($multiFactorAuthValidationResponseTransfer->getIsRequired() === true) {
+                if ($plugin instanceof AuthenticationCodeInvalidatorPluginInterface) {
+                    $multiFactorAuthTransfer = (new MultiFactorAuthTransfer())->setUser($userTransfer);
+                    $plugin->invalidateAgentCodes($multiFactorAuthTransfer);
+                }
 
-                return $this;
+                if ($this->isRequestCorrupted($request)) {
+                    $this->setIsResolved(false);
+
+                    return $this;
+                }
             }
 
             $this->setIsRequired($multiFactorAuthValidationResponseTransfer->getIsRequiredOrFail());

@@ -22,6 +22,7 @@
 
     <transfer name="MultiFactorAuthValidationRequest" strict="true">
         <property name="user" type="User"/>
+        <property name="isLogin" type="bool"/>
     </transfer>
 
     <transfer name="MultiFactorAuthValidationResponse" strict="true">
@@ -31,6 +32,10 @@
 
     <transfer name="Store">
         <property name="name" type="string"/>
+    </transfer>
+
+    <transfer name="MultiFactorAuth" strict="true">
+        <property name="user" type="User"/>
     </transfer>
 
 </transfers>
