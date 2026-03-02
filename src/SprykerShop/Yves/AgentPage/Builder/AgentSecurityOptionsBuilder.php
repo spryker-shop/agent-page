@@ -64,11 +64,6 @@ class AgentSecurityOptionsBuilder implements AgentSecurityOptionsBuilderInterfac
      */
     protected LoginCheckUrlFormatterInterface $loginCheckUrlFormatter;
 
-    /**
-     * @param \SprykerShop\Yves\AgentPage\AgentPageConfig $config
-     * @param \Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
-     * @param \SprykerShop\Yves\AgentPage\Formatter\LoginCheckUrlFormatterInterface $loginCheckUrlFormatter
-     */
     public function __construct(
         AgentPageConfig $config,
         UserProviderInterface $userProvider,

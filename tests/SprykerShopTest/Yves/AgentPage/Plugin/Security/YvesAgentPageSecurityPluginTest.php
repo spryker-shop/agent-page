@@ -73,9 +73,6 @@ class YvesAgentPageSecurityPluginTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -118,9 +115,6 @@ class YvesAgentPageSecurityPluginTest extends Unit
         $property->setValue(null);
     }
 
-    /**
-     * @return void
-     */
     public function testAgentCanLogin(): void
     {
         // Arrange
@@ -146,9 +140,6 @@ class YvesAgentPageSecurityPluginTest extends Unit
         $this->assertSame($userTransfer->getUsername() . static::AUTHENTICATED, $httpKernelBrowser->getResponse()->getContent());
     }
 
-    /**
-     * @return void
-     */
     public function testAgentIsRedirectedOnAuthenticationFailure(): void
     {
         // Arrange
@@ -174,9 +165,6 @@ class YvesAgentPageSecurityPluginTest extends Unit
         $this->assertSame(static::ACCESS_MODE_PUBLIC, $httpKernelBrowser->getResponse()->getContent());
     }
 
-    /**
-     * @return void
-     */
     public function testAgentCanSwitchUser(): void
     {
         // Arrange
@@ -205,9 +193,6 @@ class YvesAgentPageSecurityPluginTest extends Unit
         $this->assertSame($customerTransfer->getEmail() . static::AUTHENTICATED, $httpKernelBrowser->getResponse()->getContent());
     }
 
-    /**
-     * @return void
-     */
     public function testInactiveAgentCanNotLogin(): void
     {
         // Arrange
@@ -235,11 +220,6 @@ class YvesAgentPageSecurityPluginTest extends Unit
         $this->assertSame(static::ACCESS_MODE_PUBLIC, $httpKernelBrowser->getResponse()->getContent());
     }
 
-    /**
-     * @param \Spryker\Service\Container\ContainerInterface $container
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     protected function createResponse(ContainerInterface $container): Response
     {
         if (!$container->has(static::SECURITY_TOKEN_STORAGE_SERVICE)) {

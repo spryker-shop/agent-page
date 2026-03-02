@@ -9,8 +9,5 @@ namespace SprykerShop\Yves\AgentPage\Formatter;
 
 interface LoginCheckUrlFormatterInterface
 {
-    /**
-     * @return string
-     */
     public function getLoginCheckPath(): string;
 }

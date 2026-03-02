@@ -63,55 +63,31 @@ use Symfony\Component\Security\Http\Authorization\AccessDeniedHandlerInterface;
  */
 class AgentPageFactory extends AbstractFactory
 {
-    /**
-     * @return \Symfony\Component\EventDispatcher\EventSubscriberInterface
-     */
     public function createSwitchUserEventSubscriber(): EventSubscriberInterface
     {
         return new SwitchUserEventSubscriber();
     }
 
-    /**
-     * @return \Symfony\Component\Security\Core\User\UserProviderInterface
-     */
     public function createAgentUserProvider(): UserProviderInterface
     {
         return new AgentUserProvider();
     }
 
-    /**
-     * @param string|null $targetUrl
-     *
-     * @return \Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface
-     */
     public function createAgentAuthenticationSuccessHandler(?string $targetUrl = null): AuthenticationSuccessHandlerInterface
     {
         return new AgentAuthenticationSuccessHandler($targetUrl);
     }
 
-    /**
-     * @param string|null $targetUrl
-     *
-     * @return \Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface
-     */
     public function createAgentAuthenticationFailureHandler(?string $targetUrl = null): AuthenticationFailureHandlerInterface
     {
         return new AgentAuthenticationFailureHandler($targetUrl);
     }
 
-    /**
-     * @return \Spryker\Yves\Router\Router\RouterInterface
-     */
     public function getRouter(): RouterInterface
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::SERVICE_ROUTER);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return \Symfony\Component\Security\Core\User\UserInterface
-     */
     public function createSecurityUser(UserTransfer $userTransfer): UserInterface
     {
         return new Agent(
@@ -132,41 +108,26 @@ class AgentPageFactory extends AbstractFactory
         return new RedirectResponse($url);
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Dependency\Client\AgentPageToMessengerClientInterface
-     */
     public function getMessengerClient(): AgentPageToMessengerClientInterface
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::CLIENT_MESSENGER);
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Dependency\Client\AgentPageToAgentClientInterface
-     */
     public function getAgentClient(): AgentPageToAgentClientInterface
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::CLIENT_AGENT);
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Dependency\Client\AgentPageToCustomerClientInterface
-     */
     public function getCustomerClient(): AgentPageToCustomerClientInterface
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::CLIENT_CUSTOMER);
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Dependency\Client\AgentPageToQuoteClientInterface
-     */
     public function getQuoteClient(): AgentPageToQuoteClientInterface
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::CLIENT_QUOTE);
     }
 
-    /**
-     * @return \Symfony\Component\Form\FormFactoryInterface
-     */
     public function getFormFactory(): FormFactoryInterface
     {
         return $this->getProvidedDependency(ApplicationConstants::FORM_FACTORY);
@@ -190,27 +151,16 @@ class AgentPageFactory extends AbstractFactory
         return $this->getProvidedDependency(AgentPageDependencyProvider::SERVICE_SECURITY_TOKEN_STORAGE);
     }
 
-    /**
-     * @return \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface
-     */
     public function getSecurityAuthorizationChecker(): AuthorizationCheckerInterface
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::SERVICE_SECURITY_AUTHORIZATION_CHECKER);
     }
 
-    /**
-     * @return string
-     */
     public function getLocale(): string
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::SERVICE_LOCALE);
     }
 
-    /**
-     * @param string $targetUrl
-     *
-     * @return \Symfony\Component\Security\Http\Authorization\AccessDeniedHandlerInterface
-     */
     public function createAccessDeniedHandler(string $targetUrl): AccessDeniedHandlerInterface
     {
         return new AccessDeniedHandler($targetUrl);
@@ -225,9 +175,6 @@ class AgentPageFactory extends AbstractFactory
             ->create(AgentLoginForm::class);
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Formatter\LoginCheckUrlFormatterInterface
-     */
     public function createLoginCheckUrlFormatter(): LoginCheckUrlFormatterInterface
     {
         return new LoginCheckUrlFormatter(
@@ -237,9 +184,6 @@ class AgentPageFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Impersonator\SessionImpersonatorInterface
-     */
     public function createSessionImpersonator(): SessionImpersonatorInterface
     {
         return new SessionImpersonator(
@@ -256,9 +200,6 @@ class AgentPageFactory extends AbstractFactory
         return $this->getProvidedDependency(AgentPageDependencyProvider::PLUGINS_SESSION_POST_IMPERSONATION);
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Builder\AgentSecurityOptionsBuilderInterface
-     */
     public function createAgentSecurityOptionsBuilder(): AgentSecurityOptionsBuilderInterface
     {
         return new AgentSecurityOptionsBuilder(
@@ -268,9 +209,6 @@ class AgentPageFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface
-     */
     public function createAgentLoginAuthenticator(): AuthenticatorInterface
     {
         return new AgentLoginFormAuthenticator(
@@ -282,9 +220,6 @@ class AgentPageFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Expander\SecurityBuilderExpanderInterface
-     */
     public function createSecurityBuilderExpander(): SecurityBuilderExpanderInterface
     {
         if (class_exists(AuthenticationProviderManager::class) === true) {
@@ -299,9 +234,6 @@ class AgentPageFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Updater\AgentTokenAfterCustomerAuthenticationSuccessUpdaterInterface
-     */
     public function createAgentTokenAfterCustomerAuthenticationSuccessUpdater(): AgentTokenAfterCustomerAuthenticationSuccessUpdaterInterface
     {
         if (class_exists(AuthenticationProviderManager::class) === true) {
@@ -316,41 +248,26 @@ class AgentPageFactory extends AbstractFactory
         );
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Logger\AuditLoggerInterface
-     */
     public function createAuditLogger(): AuditLoggerInterface
     {
         return new AuditLogger($this->createAuditLoggerCustomerProvider());
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Logger\DataProvider\AuditLoggerCustomerProviderInterface
-     */
     public function createAuditLoggerCustomerProvider(): AuditLoggerCustomerProviderInterface
     {
         return new AuditLoggerCustomerProvider($this->getTokenStorage());
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Processor\CurrentRequestProcessorInterface
-     */
     public function createCurrentRequestProcessor(): CurrentRequestProcessorInterface
     {
         return new CurrentRequestProcessor($this->getRequestStackService());
     }
 
-    /**
-     * @return \Symfony\Component\HttpFoundation\RequestStack
-     */
     public function getRequestStackService(): RequestStack
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::SERVICE_REQUEST_STACK);
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Badge\MultiFactorAuthBadge
-     */
     public function createMultiFactorAuthBadge(): MultiFactorAuthBadge
     {
         return new MultiFactorAuthBadge($this->getAgentUserMultiFactorAuthenticationHandlerPlugins());
@@ -364,17 +281,11 @@ class AgentPageFactory extends AbstractFactory
         return $this->getProvidedDependency(AgentPageDependencyProvider::PLUGINS_AGENT_USER_AUTHENTICATION_HANDLER);
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Dependency\Client\AgentPageToSessionClientInterface
-     */
     public function getSessionClient(): AgentPageToSessionClientInterface
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::CLIENT_SESSION);
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Dependency\Client\AgentPageToStoreClientInterface
-     */
     public function getStoreClient(): AgentPageToStoreClientInterface
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::CLIENT_STORE);

@@ -9,8 +9,5 @@ namespace SprykerShop\Yves\AgentPage\Updater;
 
 interface AgentTokenAfterCustomerAuthenticationSuccessUpdaterInterface
 {
-    /**
-     * @return void
-     */
     public function execute(): void;
 }

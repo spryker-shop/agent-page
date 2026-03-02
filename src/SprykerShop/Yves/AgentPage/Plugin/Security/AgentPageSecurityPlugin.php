@@ -105,11 +105,6 @@ class AgentPageSecurityPlugin extends AbstractPlugin implements SecurityPluginIn
         return $securityBuilder;
     }
 
-    /**
-     * @param \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface $securityBuilder
-     *
-     * @return \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface
-     */
     protected function addFirewalls(SecurityBuilderInterface $securityBuilder): SecurityBuilderInterface
     {
         $securityBuilder->addFirewall(AgentPageConfig::SECURITY_FIREWALL_NAME, [
@@ -149,11 +144,6 @@ class AgentPageSecurityPlugin extends AbstractPlugin implements SecurityPluginIn
         return $securityBuilder;
     }
 
-    /**
-     * @param \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface $securityBuilder
-     *
-     * @return \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface
-     */
     protected function addAccessRules(SecurityBuilderInterface $securityBuilder): SecurityBuilderInterface
     {
         $securityBuilder->addAccessRules([
@@ -169,11 +159,6 @@ class AgentPageSecurityPlugin extends AbstractPlugin implements SecurityPluginIn
         return $securityBuilder;
     }
 
-    /**
-     * @param \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface $securityBuilder
-     *
-     * @return \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface
-     */
     protected function addAuthenticationSuccessHandler(SecurityBuilderInterface $securityBuilder): SecurityBuilderInterface
     {
         $securityBuilder->addAuthenticationSuccessHandler(AgentPageConfig::SECURITY_FIREWALL_NAME, function (ContainerInterface $container) {
@@ -185,11 +170,6 @@ class AgentPageSecurityPlugin extends AbstractPlugin implements SecurityPluginIn
         return $securityBuilder;
     }
 
-    /**
-     * @param \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface $securityBuilder
-     *
-     * @return \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface
-     */
     protected function addAuthenticationFailureHandler(SecurityBuilderInterface $securityBuilder): SecurityBuilderInterface
     {
         $securityBuilder->addAuthenticationFailureHandler(AgentPageConfig::SECURITY_FIREWALL_NAME, function (ContainerInterface $container) {
@@ -201,11 +181,6 @@ class AgentPageSecurityPlugin extends AbstractPlugin implements SecurityPluginIn
         return $securityBuilder;
     }
 
-    /**
-     * @param \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface $securityBuilder
-     *
-     * @return void
-     */
     protected function addSwitchUserEventSubscriber(SecurityBuilderInterface $securityBuilder): void
     {
         $securityBuilder->addEventSubscriber(function () {
@@ -213,11 +188,6 @@ class AgentPageSecurityPlugin extends AbstractPlugin implements SecurityPluginIn
         });
     }
 
-    /**
-     * @param \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface $securityBuilder
-     *
-     * @return \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface
-     */
     protected function addAccessDeniedHandler(SecurityBuilderInterface $securityBuilder): SecurityBuilderInterface
     {
         $securityBuilder->addAccessDeniedHandler(AgentPageConfig::SECURITY_FIREWALL_NAME, function (ContainerInterface $container) {
@@ -229,11 +199,6 @@ class AgentPageSecurityPlugin extends AbstractPlugin implements SecurityPluginIn
         return $securityBuilder;
     }
 
-    /**
-     * @param \Spryker\Service\Container\ContainerInterface $container
-     *
-     * @return \Spryker\Yves\Router\Router\ChainRouter
-     */
     protected function getRouter(ContainerInterface $container): ChainRouter
     {
         return $container->get(static::SERVICE_ROUTER);

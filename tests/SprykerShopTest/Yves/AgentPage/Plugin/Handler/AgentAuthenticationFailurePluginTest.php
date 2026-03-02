@@ -22,9 +22,6 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class AgentAuthenticationFailurePluginTest extends AbstractPluginTest
 {
-    /**
-     * @return void
-     */
     public function testOnAuthenticationFailureAddsAgentFailedLoginAuditLogWhenLoginAttemptFails(): void
     {
         // Arrange
@@ -34,11 +31,6 @@ class AgentAuthenticationFailurePluginTest extends AbstractPluginTest
         $agentAuthenticationFailureHandler->onAuthenticationFailure(new Request(), new AuthenticationException());
     }
 
-    /**
-     * @param string $expectedAuditLogMessage
-     *
-     * @return \SprykerShop\Yves\AgentPage\Plugin\Handler\AgentAuthenticationFailureHandler
-     */
     protected function getAgentAuthenticationFailureHandler(string $expectedAuditLogMessage): AgentAuthenticationFailureHandler
     {
         $agentAuthenticationFailureHandler = new AgentAuthenticationFailureHandler('/test');

@@ -26,9 +26,6 @@ use Symfony\Component\Security\Http\Authenticator\Token\PostAuthenticationToken;
  */
 class AgentAuthenticationSuccessPluginTest extends AbstractPluginTest
 {
-    /**
-     * @return void
-     */
     public function testOnAuthenticationSuccessAddsAgentSuccessfulLoginAuditLogOnSuccessfulLogin(): void
     {
         // Arrange
@@ -41,11 +38,6 @@ class AgentAuthenticationSuccessPluginTest extends AbstractPluginTest
         $agentAuthenticationSuccessHandler->onAuthenticationSuccess($request, $tokenMock);
     }
 
-    /**
-     * @param string $expectedAuditLogMessage
-     *
-     * @return \SprykerShop\Yves\AgentPage\Plugin\Handler\AgentAuthenticationSuccessHandler
-     */
     protected function getAgentAuthenticationSuccessHandler(string $expectedAuditLogMessage): AgentAuthenticationSuccessHandler
     {
         $agentAuthenticationSuccessHandler = new AgentAuthenticationSuccessHandler('/test');

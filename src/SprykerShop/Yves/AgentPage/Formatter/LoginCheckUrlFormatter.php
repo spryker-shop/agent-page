@@ -22,11 +22,6 @@ class LoginCheckUrlFormatter implements LoginCheckUrlFormatterInterface
      */
     protected const ROUTE_WITH_STORE_PLACEHOLDER = '/%s%s';
 
-    /**
-     * @param \SprykerShop\Yves\AgentPage\AgentPageConfig $agentPageConfig
-     * @param string $localeName
-     * @param \SprykerShop\Yves\AgentPage\Dependency\Client\AgentPageToStoreClientInterface $storeClient
-     */
     public function __construct(
         protected AgentPageConfig $agentPageConfig,
         protected string $localeName,
@@ -34,9 +29,6 @@ class LoginCheckUrlFormatter implements LoginCheckUrlFormatterInterface
     ) {
     }
 
-    /**
-     * @return string
-     */
     public function getLoginCheckPath(): string
     {
         $loginCheckPath = static::ROUTE_CHECK_PATH;
@@ -52,9 +44,6 @@ class LoginCheckUrlFormatter implements LoginCheckUrlFormatterInterface
         return $loginCheckPath;
     }
 
-    /**
-     * @return string
-     */
     protected function getDefaultLocalePrefix(): string
     {
         return '/' . mb_substr($this->localeName, 0, 2);

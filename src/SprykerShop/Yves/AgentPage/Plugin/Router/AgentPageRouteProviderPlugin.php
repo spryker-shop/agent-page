@@ -54,11 +54,6 @@ class AgentPageRouteProviderPlugin extends AbstractRouteProviderPlugin
         return $routeCollection;
     }
 
-    /**
-     * @param \Spryker\Yves\Router\Route\RouteCollection $routeCollection
-     *
-     * @return \Spryker\Yves\Router\Route\RouteCollection
-     */
     protected function addLoginRoute(RouteCollection $routeCollection): RouteCollection
     {
         $route = $this->buildRoute('/agent/login', 'AgentPage', 'Auth', 'loginAction');

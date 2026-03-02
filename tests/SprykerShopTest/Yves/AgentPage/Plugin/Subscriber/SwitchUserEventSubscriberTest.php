@@ -26,9 +26,6 @@ use Symfony\Component\Security\Http\Event\SwitchUserEvent;
  */
 class SwitchUserEventSubscriberTest extends AbstractPluginTest
 {
-    /**
-     * @return void
-     */
     public function testSwitchUserAddsImpersonationStartedAuditLogWhenImpersonationStarted(): void
     {
         // Arrange
@@ -43,9 +40,6 @@ class SwitchUserEventSubscriberTest extends AbstractPluginTest
         $switchUserEventSubscriber->switchUser($switchUserEvent);
     }
 
-    /**
-     * @return void
-     */
     public function testSwitchUserAddsImpersonationEndedAuditLogWhenImpersonationEnded(): void
     {
         // Arrange

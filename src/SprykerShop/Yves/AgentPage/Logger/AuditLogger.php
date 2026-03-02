@@ -34,41 +34,26 @@ class AuditLogger implements AuditLoggerInterface
      */
     protected AuditLoggerCustomerProviderInterface $auditLoggerCustomerProvider;
 
-    /**
-     * @param \SprykerShop\Yves\AgentPage\Logger\DataProvider\AuditLoggerCustomerProviderInterface $auditLoggerCustomerProvider
-     */
     public function __construct(AuditLoggerCustomerProviderInterface $auditLoggerCustomerProvider)
     {
         $this->auditLoggerCustomerProvider = $auditLoggerCustomerProvider;
     }
 
-    /**
-     * @return void
-     */
     public function addAgentFailedLoginAuditLog(): void
     {
         $this->addAuditLogWithTags('Failed Login (Agent)', ['agent_failed_login']);
     }
 
-    /**
-     * @return void
-     */
     public function addAgentSuccessfulLoginAuditLog(): void
     {
         $this->addAuditLogWithTags('Successful Login (Agent)', ['agent_successful_login']);
     }
 
-    /**
-     * @return void
-     */
     public function addImpersonationStartedAuditLog(): void
     {
         $this->addAuditLogWithTags('Impersonation Started', ['impersonation_started']);
     }
 
-    /**
-     * @return void
-     */
     public function addImpersonationEndedAuditLog(): void
     {
         $context = $this->addOriginalCustomerContext([static::AUDIT_LOGGER_RECORD_KEY_CONTEXT_TAGS => ['impersonation_ended']]);

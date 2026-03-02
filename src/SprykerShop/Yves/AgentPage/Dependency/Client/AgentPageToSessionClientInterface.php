@@ -9,12 +9,6 @@ namespace SprykerShop\Yves\AgentPage\Dependency\Client;
 
 interface AgentPageToSessionClientInterface
 {
-    /**
-     * @param string $name
-     * @param mixed $value
-     *
-     * @return void
-     */
     public function set(string $name, mixed $value): void;
 
     /**

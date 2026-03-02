@@ -19,9 +19,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class AbstractPluginTest extends Unit
 {
-    /**
-     * @return \Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken
-     */
     protected function getSwitchUserTokenMock(): SwitchUserToken
     {
         $agentPageFactoryMock = $this->createMock(SwitchUserToken::class);
@@ -41,9 +38,6 @@ class AbstractPluginTest extends Unit
         return $tokenMock;
     }
 
-    /**
-     * @return \SprykerShop\Yves\AgentPage\Security\Agent
-     */
     protected function getAgentMock(): Agent
     {
         $agentMock = $this->createMock(Agent::class);

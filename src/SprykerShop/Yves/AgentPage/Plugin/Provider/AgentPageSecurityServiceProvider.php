@@ -129,11 +129,6 @@ class AgentPageSecurityServiceProvider extends AbstractPlugin implements Service
         ], $app['security.access_rules']);
     }
 
-    /**
-     * @param \Silex\Application $app
-     *
-     * @return void
-     */
     protected function setAuthenticationSuccessHandler(Application $app): void
     {
         $app['security.authentication.success_handler.' . AgentPageConfig::SECURITY_FIREWALL_NAME] = $app->share(function () {
@@ -141,11 +136,6 @@ class AgentPageSecurityServiceProvider extends AbstractPlugin implements Service
         });
     }
 
-    /**
-     * @param \Silex\Application $app
-     *
-     * @return void
-     */
     protected function setAuthenticationFailureHandler(Application $app): void
     {
         $app['security.authentication.failure_handler.' . AgentPageConfig::SECURITY_FIREWALL_NAME] = $app->share(function () {
@@ -153,11 +143,6 @@ class AgentPageSecurityServiceProvider extends AbstractPlugin implements Service
         });
     }
 
-    /**
-     * @param \Silex\Application $app
-     *
-     * @return void
-     */
     protected function setSwitchUserEventSubscriber(Application $app): void
     {
         $app['dispatcher'] = $app->share(
@@ -191,12 +176,6 @@ class AgentPageSecurityServiceProvider extends AbstractPlugin implements Service
         return $prefixLocale;
     }
 
-    /**
-     * @param string $path
-     * @param string|null $prefixLocale
-     *
-     * @return string
-     */
     protected function buildPathWithLocalePrefix(string $path, ?string $prefixLocale = null): string
     {
         if ($prefixLocale !== null) {

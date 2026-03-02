@@ -54,9 +54,6 @@ class AuthController extends AbstractController
         ], [], '@AgentPage/views/login/login.twig');
     }
 
-    /**
-     * @return \Symfony\Component\Form\FormView
-     */
     protected function getLoginForm(): FormView
     {
         return $this->getFactory()

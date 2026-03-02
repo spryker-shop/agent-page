@@ -12,11 +12,5 @@ use Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface;
 
 interface SecurityBuilderExpanderInterface
 {
-    /**
-     * @param \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface $securityBuilder
-     * @param \Spryker\Service\Container\ContainerInterface $container
-     *
-     * @return \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface
-     */
     public function extend(SecurityBuilderInterface $securityBuilder, ContainerInterface $container): SecurityBuilderInterface;
 }

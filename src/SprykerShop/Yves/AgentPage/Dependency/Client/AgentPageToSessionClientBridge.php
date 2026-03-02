@@ -22,12 +22,6 @@ class AgentPageToSessionClientBridge implements AgentPageToSessionClientInterfac
         $this->sessionClient = $sessionClient;
     }
 
-    /**
-     * @param string $name
-     * @param mixed $value
-     *
-     * @return void
-     */
     public function set(string $name, mixed $value): void
     {
         $this->sessionClient->set($name, $value);

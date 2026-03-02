@@ -35,11 +35,6 @@ class SessionImpersonator implements SessionImpersonatorInterface
         $this->sessionPostImpersonationPlugins = $sessionPostImpersonationPlugins;
     }
 
-    /**
-     * @param \SprykerShop\Yves\CustomerPage\Security\Customer $customer
-     *
-     * @return void
-     */
     public function impersonate(Customer $customer): void
     {
         $customerTransfer = $customer->getCustomerTransfer();
@@ -48,11 +43,6 @@ class SessionImpersonator implements SessionImpersonatorInterface
         $this->executeSessionPostImpersonationPlugins($customerTransfer);
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\CustomerTransfer $customerTransfer
-     *
-     * @return void
-     */
     protected function executeSessionPostImpersonationPlugins(CustomerTransfer $customerTransfer): void
     {
         foreach ($this->sessionPostImpersonationPlugins as $sessionPostImpersonationPlugin) {

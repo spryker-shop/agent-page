@@ -43,9 +43,6 @@ class FixAgentTokenAfterCustomerAuthenticationSuccessPlugin extends AbstractPlug
         $this->fixAgentToken();
     }
 
-    /**
-     * @return void
-     */
     protected function fixAgentToken(): void
     {
         if ($this->getFactory()->getSecurityAuthorizationChecker()->isGranted(static::ROLE_PREVIOUS_ADMIN)) {
@@ -65,11 +62,6 @@ class FixAgentTokenAfterCustomerAuthenticationSuccessPlugin extends AbstractPlug
         $this->changeToken($tokenStorage);
     }
 
-    /**
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
-     *
-     * @return void
-     */
     protected function changeToken(TokenStorageInterface $tokenStorage): void
     {
         /** @var \SprykerShop\Yves\CustomerPage\Security\Customer $customer */
@@ -80,11 +72,6 @@ class FixAgentTokenAfterCustomerAuthenticationSuccessPlugin extends AbstractPlug
         $tokenStorage->setToken($token);
     }
 
-    /**
-     * @param \SprykerShop\Yves\CustomerPage\Security\Customer $customer
-     *
-     * @return \Symfony\Component\Security\Core\User\UserInterface
-     */
     protected function createCustomerSecurityUser(Customer $customer): UserInterface
     {
         return new Customer(
@@ -95,11 +82,6 @@ class FixAgentTokenAfterCustomerAuthenticationSuccessPlugin extends AbstractPlug
         );
     }
 
-    /**
-     * @param \SprykerShop\Yves\CustomerPage\Security\Customer $customer
-     *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
-     */
     protected function createUsernamePasswordToken(Customer $customer): TokenInterface
     {
         $user = $this->createCustomerSecurityUser($customer);

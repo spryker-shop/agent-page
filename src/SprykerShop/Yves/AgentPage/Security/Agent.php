@@ -33,10 +33,6 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
      */
     protected $roles = [];
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     * @param array $roles
-     */
     public function __construct(UserTransfer $userTransfer, array $roles = [])
     {
         $this->userTransfer = $userTransfer;
@@ -79,9 +75,6 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->password;
     }
 
-    /**
-     * @return void
-     */
     public function eraseCredentials(): void
     {
     }
@@ -94,9 +87,6 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->userTransfer;
     }
 
-    /**
-     * @return string
-     */
     public function getUserIdentifier(): string
     {
         return $this->username;

@@ -39,11 +39,6 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
         return $this->loadUserByIdentifier($username);
     }
 
-    /**
-     * @param string $identifier
-     *
-     * @return \Symfony\Component\Security\Core\User\UserInterface
-     */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         $userTransfer = $this->findUserByUsername($identifier);
@@ -85,11 +80,6 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
         return is_a($class, Agent::class, true) || is_a($class, Customer::class, true);
     }
 
-    /**
-     * @param string $username
-     *
-     * @return \Generated\Shared\Transfer\UserTransfer|null
-     */
     protected function findUserByUsername(string $username): ?UserTransfer
     {
         $userTransfer = new UserTransfer();
@@ -106,11 +96,6 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
         return null;
     }
 
-    /**
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user
-     *
-     * @return \Generated\Shared\Transfer\UserTransfer|null
-     */
     protected function getUserTransfer(UserInterface $user): ?UserTransfer
     {
         $userTransfer = $this->findUserByUsername(
@@ -126,11 +111,6 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
         return $userTransfer;
     }
 
-    /**
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user
-     *
-     * @return string
-     */
     protected function getUserIdentifier(UserInterface $user): string
     {
         if ($this->isSymfonyVersion5() === true) {

@@ -42,20 +42,11 @@ class AgentAuthenticationFailureHandler extends AbstractPlugin implements Authen
      */
     protected $targetUrl;
 
-    /**
-     * @param string|null $targetUrl
-     */
     public function __construct(?string $targetUrl = null)
     {
         $this->targetUrl = $targetUrl;
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Exception\AuthenticationException $exception
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         $this->getFactory()
@@ -71,9 +62,6 @@ class AgentAuthenticationFailureHandler extends AbstractPlugin implements Authen
         return new RedirectResponse($this->targetUrl ?? $this->getRedirectUrl());
     }
 
-    /**
-     * @return string
-     */
     protected function getRedirectUrl(): string
     {
         return $this->getFactory()
@@ -81,9 +69,6 @@ class AgentAuthenticationFailureHandler extends AbstractPlugin implements Authen
             ->generate(static::ROUTE_LOGIN);
     }
 
-    /**
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     protected function createAjaxResponse(): JsonResponse
     {
         return new JsonResponse([

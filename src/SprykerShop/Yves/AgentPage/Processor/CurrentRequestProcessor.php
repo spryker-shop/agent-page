@@ -48,9 +48,6 @@ class CurrentRequestProcessor implements CurrentRequestProcessorInterface
      */
     protected RequestStack $requestStack;
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
-     */
     public function __construct(RequestStack $requestStack)
     {
         $this->requestStack = $requestStack;
@@ -115,11 +112,6 @@ class CurrentRequestProcessor implements CurrentRequestProcessorInterface
         return $currentRequestData;
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     *
-     * @return \Generated\Shared\Transfer\UserTransfer|null
-     */
     protected function findAgentUser(Request $request): ?UserTransfer
     {
         if (!$request->getSession()->has(static::SESSION_KEY_AGENT_SESSION)) {

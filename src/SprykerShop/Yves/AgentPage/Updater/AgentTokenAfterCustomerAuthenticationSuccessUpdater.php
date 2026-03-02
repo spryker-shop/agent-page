@@ -46,12 +46,6 @@ class AgentTokenAfterCustomerAuthenticationSuccessUpdater implements AgentTokenA
      */
     protected AgentPageToCustomerClientInterface $customerClient;
 
-    /**
-     * @param \Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface $authorizationChecker
-     * @param \SprykerShop\Yves\AgentPage\Dependency\Client\AgentPageToAgentClientInterface $agentClient
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
-     * @param \SprykerShop\Yves\AgentPage\Dependency\Client\AgentPageToCustomerClientInterface $customerClient
-     */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         AgentPageToAgentClientInterface $agentClient,
@@ -64,9 +58,6 @@ class AgentTokenAfterCustomerAuthenticationSuccessUpdater implements AgentTokenA
         $this->customerClient = $customerClient;
     }
 
-    /**
-     * @return void
-     */
     public function execute(): void
     {
         if ($this->authorizationChecker->isGranted(static::ROLE_PREVIOUS_ADMIN)) {
@@ -84,9 +75,6 @@ class AgentTokenAfterCustomerAuthenticationSuccessUpdater implements AgentTokenA
         $this->changeToken();
     }
 
-    /**
-     * @return void
-     */
     protected function changeToken(): void
     {
         /** @var \SprykerShop\Yves\CustomerPage\Security\Customer $customer */
@@ -96,11 +84,6 @@ class AgentTokenAfterCustomerAuthenticationSuccessUpdater implements AgentTokenA
         $this->tokenStorage->setToken($token);
     }
 
-    /**
-     * @param \SprykerShop\Yves\CustomerPage\Security\Customer $customer
-     *
-     * @return \Symfony\Component\Security\Core\User\UserInterface
-     */
     protected function createCustomerSecurityUser(Customer $customer): UserInterface
     {
         return new Customer(
@@ -111,11 +94,6 @@ class AgentTokenAfterCustomerAuthenticationSuccessUpdater implements AgentTokenA
         );
     }
 
-    /**
-     * @param \SprykerShop\Yves\CustomerPage\Security\Customer $customer
-     *
-     * @return \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
-     */
     protected function createUsernamePasswordToken(Customer $customer): TokenInterface
     {
         $user = $this->createCustomerSecurityUser($customer);

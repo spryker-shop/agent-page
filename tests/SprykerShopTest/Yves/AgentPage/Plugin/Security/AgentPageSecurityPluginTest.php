@@ -52,9 +52,6 @@ class AgentPageSecurityPluginTest extends Unit
      */
     protected $tester;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         parent::setUp();
@@ -93,9 +90,6 @@ class AgentPageSecurityPluginTest extends Unit
         });
     }
 
-    /**
-     * @return void
-     */
     public function testAgentCanLogin(): void
     {
         $container = $this->tester->getContainer();
@@ -116,9 +110,6 @@ class AgentPageSecurityPluginTest extends Unit
         $this->assertSame($userTransfer->getUsername() . 'AUTHENTICATED', $httpKernelBrowser->getResponse()->getContent());
     }
 
-    /**
-     * @return void
-     */
     public function testAgentIsRedirectedOnAuthenticationFailure(): void
     {
         $container = $this->tester->getContainer();
@@ -139,9 +130,6 @@ class AgentPageSecurityPluginTest extends Unit
         $this->assertSame('ANONYMOUS', $httpKernelBrowser->getResponse()->getContent());
     }
 
-    /**
-     * @return void
-     */
     public function testAgentCanSwitchUser(): void
     {
         $container = $this->tester->getContainer();
@@ -165,9 +153,6 @@ class AgentPageSecurityPluginTest extends Unit
         $this->assertSame($customerTransfer->getEmail() . 'AUTHENTICATED', $httpKernelBrowser->getResponse()->getContent());
     }
 
-    /**
-     * @return void
-     */
     public function testInactiveAgentCanNotLogin(): void
     {
         // Arrange

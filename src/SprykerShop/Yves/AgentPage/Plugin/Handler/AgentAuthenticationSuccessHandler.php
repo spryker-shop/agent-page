@@ -49,20 +49,11 @@ class AgentAuthenticationSuccessHandler extends AbstractPlugin implements Authen
      */
     protected const MULTI_FACTOR_AUTH_LOGIN_AGENT_EMAIL_SESSION_KEY = '_multi_factor_auth_login_agent_email';
 
-    /**
-     * @param string|null $targetUrl
-     */
     public function __construct(?string $targetUrl = null)
     {
         $this->targetUrl = $targetUrl;
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token): Response
     {
         $userTransfer = $this->getSecurityUser($token)->getUserTransfer();
@@ -82,11 +73,6 @@ class AgentAuthenticationSuccessHandler extends AbstractPlugin implements Authen
         return $this->createRedirectResponse();
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return void
-     */
     public function executeOnAuthenticationSuccess(UserTransfer $userTransfer): void
     {
         $this->setAgentSession($userTransfer);
@@ -94,11 +80,6 @@ class AgentAuthenticationSuccessHandler extends AbstractPlugin implements Authen
         $this->getFactory()->createAuditLogger()->addAgentSuccessfulLoginAuditLog();
     }
 
-    /**
-     * @param bool $requiresAdditionalAuth
-     *
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
-     */
     protected function createAjaxResponse(bool $requiresAdditionalAuth = false): JsonResponse
     {
         return new JsonResponse([
@@ -106,11 +87,6 @@ class AgentAuthenticationSuccessHandler extends AbstractPlugin implements Authen
         ]);
     }
 
-    /**
-     * @param \Symfony\Component\Security\Core\Authentication\Token\TokenInterface $token
-     *
-     * @return \SprykerShop\Yves\AgentPage\Security\Agent
-     */
     protected function getSecurityUser(TokenInterface $token): Agent
     {
         /** @var \SprykerShop\Yves\AgentPage\Security\Agent $user */

@@ -11,8 +11,5 @@ use Generated\Shared\Transfer\CustomerTransfer;
 
 interface AuditLoggerCustomerProviderInterface
 {
-    /**
-     * @return \Generated\Shared\Transfer\CustomerTransfer|null
-     */
     public function findOriginalCustomer(): ?CustomerTransfer;
 }

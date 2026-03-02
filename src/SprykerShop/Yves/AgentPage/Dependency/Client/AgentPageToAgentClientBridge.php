@@ -24,53 +24,31 @@ class AgentPageToAgentClientBridge implements AgentPageToAgentClientInterface
         $this->agentClient = $agentClient;
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return \Generated\Shared\Transfer\UserTransfer|null
-     */
     public function findAgentByUsername(UserTransfer $userTransfer): ?UserTransfer
     {
         return $this->agentClient->findAgentByUsername($userTransfer);
     }
 
-    /**
-     * @return bool
-     */
     public function isLoggedIn(): bool
     {
         return $this->agentClient->isLoggedIn();
     }
 
-    /**
-     * @return \Generated\Shared\Transfer\UserTransfer
-     */
     public function getAgent(): UserTransfer
     {
         return $this->agentClient->getAgent();
     }
 
-    /**
-     * @param \Generated\Shared\Transfer\UserTransfer $userTransfer
-     *
-     * @return void
-     */
     public function setAgent(UserTransfer $userTransfer): void
     {
         $this->agentClient->setAgent($userTransfer);
     }
 
-    /**
-     * @return void
-     */
     public function invalidateAgentSession(): void
     {
         $this->agentClient->invalidateAgentSession();
     }
 
-    /**
-     * @return void
-     */
     public function finishImpersonationSession(): void
     {
         $this->agentClient->finishImpersonationSession();

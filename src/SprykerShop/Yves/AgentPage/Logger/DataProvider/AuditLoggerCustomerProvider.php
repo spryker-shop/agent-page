@@ -25,17 +25,11 @@ class AuditLoggerCustomerProvider implements AuditLoggerCustomerProviderInterfac
      */
     protected TokenStorageInterface $tokenStorage;
 
-    /**
-     * @param \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $tokenStorage
-     */
     public function __construct(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
     }
 
-    /**
-     * @return \Generated\Shared\Transfer\CustomerTransfer|null
-     */
     public function findOriginalCustomer(): ?CustomerTransfer
     {
         $token = $this->tokenStorage->getToken();

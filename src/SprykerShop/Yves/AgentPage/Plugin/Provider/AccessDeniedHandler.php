@@ -25,20 +25,11 @@ class AccessDeniedHandler extends AbstractPlugin implements AccessDeniedHandlerI
      */
     protected $targetUrl;
 
-    /**
-     * @param string $targetUrl
-     */
     public function __construct(string $targetUrl)
     {
         $this->targetUrl = $targetUrl;
     }
 
-    /**
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \Symfony\Component\Security\Core\Exception\AccessDeniedException $accessDeniedException
-     *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|null
-     */
     public function handle(Request $request, AccessDeniedException $accessDeniedException): ?RedirectResponse
     {
         return $this->getFactory()->createRedirectResponse($this->targetUrl);

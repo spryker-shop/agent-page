@@ -109,11 +109,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
      */
     public const CLIENT_STORE = 'CLIENT_STORE';
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     public function provideDependencies(Container $container): Container
     {
         $container = parent::provideDependencies($container);
@@ -136,11 +131,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addAgentClient(Container $container): Container
     {
         $container->set(static::CLIENT_AGENT, function (Container $container): AgentPageToAgentClientInterface {
@@ -152,11 +142,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addCustomerClient(Container $container): Container
     {
         $container->set(static::CLIENT_CUSTOMER, function (Container $container): AgentPageToCustomerClientInterface {
@@ -168,11 +153,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addMessengerClient(Container $container): Container
     {
         $container->set(static::CLIENT_MESSENGER, function (Container $container): AgentPageToMessengerClientInterface {
@@ -184,11 +164,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addQuoteClient(Container $container): Container
     {
         $container->set(static::CLIENT_QUOTE, function (Container $container): AgentPageToQuoteClientInterface {
@@ -200,11 +175,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addSecurityTokenStorage(Container $container): Container
     {
         $container->set(static::SERVICE_SECURITY_TOKEN_STORAGE, function (Container $container) {
@@ -214,11 +184,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addSecurityAuthorizationChecker(Container $container): Container
     {
         $container->set(static::SERVICE_SECURITY_AUTHORIZATION_CHECKER, function (Container $container) {
@@ -228,11 +193,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addRouter(Container $container): Container
     {
         $container->set(static::SERVICE_ROUTER, function (ContainerInterface $container) {
@@ -258,11 +218,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addLocale(Container $container): Container
     {
         $container->set(static::SERVICE_LOCALE, function (Container $container) {
@@ -272,11 +227,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addRequestStackService(Container $container): Container
     {
         $container->set(static::SERVICE_REQUEST_STACK, function (Container $container) {
@@ -286,11 +236,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addSessionPostImpersonationPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_SESSION_POST_IMPERSONATION, function () {
@@ -308,11 +253,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return [];
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addAgentUserAuthenticationHandlerPlugins(Container $container): Container
     {
         $container->set(static::PLUGINS_AGENT_USER_AUTHENTICATION_HANDLER, function () {
@@ -346,11 +286,6 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         return $container;
     }
 
-    /**
-     * @param \Spryker\Yves\Kernel\Container $container
-     *
-     * @return \Spryker\Yves\Kernel\Container
-     */
     protected function addStoreClient(Container $container): Container
     {
         $container->set(static::CLIENT_STORE, function (Container $container) {

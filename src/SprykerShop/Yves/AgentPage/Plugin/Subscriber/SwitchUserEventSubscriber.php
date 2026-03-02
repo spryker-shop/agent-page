@@ -75,11 +75,6 @@ class SwitchUserEventSubscriber extends AbstractPlugin implements EventSubscribe
         }
     }
 
-    /**
-     * @param \SprykerShop\Yves\CustomerPage\Security\Customer $customer
-     *
-     * @return void
-     */
     protected function onImpersonationStart(Customer $customer): void
     {
         $this->getFactory()
@@ -87,9 +82,6 @@ class SwitchUserEventSubscriber extends AbstractPlugin implements EventSubscribe
             ->impersonate($customer);
     }
 
-    /**
-     * @return void
-     */
     protected function onImpersonationEnd(): void
     {
         $this->getFactory()->getAgentClient()->finishImpersonationSession();
@@ -108,11 +100,6 @@ class SwitchUserEventSubscriber extends AbstractPlugin implements EventSubscribe
             ->setQuote(new QuoteTransfer());
     }
 
-    /**
-     * @param \Symfony\Component\Security\Http\Event\SwitchUserEvent $switchUserEvent
-     *
-     * @return string|null
-     */
     protected function findAgentUsername(SwitchUserEvent $switchUserEvent): ?string
     {
         $token = $switchUserEvent->getToken();
@@ -128,11 +115,6 @@ class SwitchUserEventSubscriber extends AbstractPlugin implements EventSubscribe
         return $originalUser->getUsername();
     }
 
-    /**
-     * @param string $username
-     *
-     * @return \Generated\Shared\Transfer\UserTransfer|null
-     */
     protected function findAgentUserByUsername(string $username): ?UserTransfer
     {
         $userTransfer = new UserTransfer();

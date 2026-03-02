@@ -20,9 +20,6 @@ class AgentController extends AbstractController
      */
     protected const LOGIN_REDIRECT_URL = '/agent/login';
 
-    /**
-     * @return \Spryker\Yves\Kernel\View\View
-     */
     public function indexAction(): View
     {
         $viewData = $this->executeIndexAction();
@@ -40,9 +37,6 @@ class AgentController extends AbstractController
         ];
     }
 
-    /**
-     * @return string
-     */
     protected function getTemplatePath(): string
     {
         if ($this->getFactory()->getAgentClient()->isLoggedIn() === false) {
