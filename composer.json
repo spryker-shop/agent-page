@@ -12,6 +12,7 @@
         "spryker-shop/shop-ui": "^1.3.0",
         "spryker/agent": "^1.7.0",
         "spryker/application": "^3.9.0",
+        "spryker/container": "^1.1.0",
         "spryker/customer": "^7.10.0",
         "spryker/kernel": "^3.52.0",
         "spryker/log": "^3.17.0",
@@ -27,7 +28,6 @@
     },
     "require-dev": {
         "spryker/code-sniffer": "*",
-        "spryker/container": "*",
         "spryker/event-dispatcher": "*",
         "spryker/propel": "*",
         "spryker/security": "*",
