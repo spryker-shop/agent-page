@@ -19,18 +19,13 @@ use Spryker\Yves\Kernel\AbstractPlugin;
 class YvesAgentPageSecurityPlugin extends AbstractPlugin implements SecurityPluginInterface
 {
     /**
-     * Specification:
+     * {@inheritDoc}
      * - Adds a firewall for the AgentPages.
      * - Adds a context and switch_user to the existing CustomerPage firewall configuration.
      * - Adds an authenticator for the AgentPages firewall configuration.
      * - Executes {@link \SprykerShop\Yves\AgentPageExtension\Dependency\Plugin\SessionPostImpersonationPluginInterface} plugin stack.
      *
      * @api
-     *
-     * @param \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface $securityBuilder
-     * @param \Spryker\Service\Container\ContainerInterface $container
-     *
-     * @return \Spryker\Shared\SecurityExtension\Configuration\SecurityBuilderInterface
      */
     public function extend(SecurityBuilderInterface $securityBuilder, ContainerInterface $container): SecurityBuilderInterface
     {

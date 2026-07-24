@@ -37,14 +37,10 @@ class AgentPageRouteProviderPlugin extends AbstractRouteProviderPlugin
     public const ROUTE_NAME_AGENT_OVERVIEW = 'agent/overview';
 
     /**
-     * Specification:
+     * {@inheritDoc}
      * - Adds Routes to the RouteCollection.
      *
      * @api
-     *
-     * @param \Spryker\Yves\Router\Route\RouteCollection $routeCollection
-     *
-     * @return \Spryker\Yves\Router\Route\RouteCollection
      */
     public function addRoutes(RouteCollection $routeCollection): RouteCollection
     {
