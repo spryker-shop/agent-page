@@ -64,7 +64,7 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
         $agentUserTransfer = $this->getUserTransfer($user);
 
         if ($agentUserTransfer === null) {
-            return $user;
+            $this->throwUserNotFoundException();
         }
 
         return $this->getFactory()->createSecurityUser($agentUserTransfer);
@@ -103,9 +103,13 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
         );
 
         if ($userTransfer === null) {
-             $this->getFactory()
+            $this->getFactory()
                 ->getAgentClient()
                 ->invalidateAgentSession();
+
+            $this->getFactory()
+                ->getAgentClient()
+                ->finishImpersonationSession();
         }
 
         return $userTransfer;
@@ -123,10 +127,8 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
     /**
      * @throws \Symfony\Component\Security\Core\Exception\UserNotFoundException
      * @throws \Symfony\Component\Security\Core\Exception\UsernameNotFoundException
-     *
-     * @return void
      */
-    protected function throwUserNotFoundException(): void
+    protected function throwUserNotFoundException(): never
     {
         if ($this->isSymfonyVersion5() === true) {
             throw new UsernameNotFoundException();
