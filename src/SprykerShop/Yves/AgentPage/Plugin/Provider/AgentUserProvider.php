@@ -50,12 +50,7 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
         return $this->getFactory()->createSecurityUser($userTransfer);
     }
 
-    /**
-     * @param \Symfony\Component\Security\Core\User\UserInterface $user
-     *
-     * @return \Symfony\Component\Security\Core\User\UserInterface
-     */
-    public function refreshUser(UserInterface $user)
+    public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$user instanceof Agent) {
             return $user;
@@ -70,12 +65,7 @@ class AgentUserProvider extends AbstractPlugin implements UserProviderInterface
         return $this->getFactory()->createSecurityUser($agentUserTransfer);
     }
 
-    /**
-     * @param string $class
-     *
-     * @return bool
-     */
-    public function supportsClass($class)
+    public function supportsClass(string $class): bool
     {
         return is_a($class, Agent::class, true) || is_a($class, Customer::class, true);
     }

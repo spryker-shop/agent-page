@@ -10,9 +10,9 @@ namespace SprykerShop\Yves\AgentPage\Processor;
 interface CurrentRequestProcessorInterface
 {
     /**
-     * @param array<string, mixed> $data
+     * @param \Monolog\LogRecord|array<string, mixed> $data
      *
-     * @return array<string, mixed>
+     * @return \Monolog\LogRecord|array<string, mixed>
      */
-    public function __invoke(array $data): array;
+    public function __invoke($data);
 }

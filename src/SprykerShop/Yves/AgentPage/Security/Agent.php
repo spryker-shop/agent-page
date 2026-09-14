@@ -121,8 +121,13 @@ class Agent implements UserInterface, PasswordAuthenticatedUserInterface, Equata
         return $this->userTransfer;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getUserIdentifier(): string
     {
+        assert($this->username !== '');
+
         return $this->username;
     }
 

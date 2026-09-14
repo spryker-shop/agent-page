@@ -54,11 +54,11 @@ class CurrentRequestProcessor implements CurrentRequestProcessorInterface
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param \Monolog\LogRecord|array<string, mixed> $data
      *
-     * @return array<string, mixed>
+     * @return \Monolog\LogRecord|array<string, mixed>
      */
-    public function __invoke(array $data): array
+    public function __invoke($data)
     {
         $currentRequestData = $this->getCurrentRequestData();
 
@@ -70,23 +70,31 @@ class CurrentRequestProcessor implements CurrentRequestProcessorInterface
     }
 
     /**
-     * @param array<string, mixed> $data
+     * @param \Monolog\LogRecord|array<string, mixed> $data
      * @param array<string, mixed> $currentRequestData
      *
-     * @return array<string, mixed>
+     * @return \Monolog\LogRecord|array<string, mixed>
      */
-    protected function setCurrentRequestData(array $data, array $currentRequestData): array
+    protected function setCurrentRequestData($data, array $currentRequestData)
     {
-        if (isset($data[static::RECORD_KEY_EXTRA][static::RECORD_KEY_REQUEST])) {
-            $data[static::RECORD_KEY_EXTRA][static::RECORD_KEY_REQUEST] = array_merge(
-                $data[static::RECORD_KEY_EXTRA][static::RECORD_KEY_REQUEST],
-                $currentRequestData,
-            );
+        if (is_array($data)) {
+            if (isset($data[static::RECORD_KEY_EXTRA][static::RECORD_KEY_REQUEST])) {
+                $data[static::RECORD_KEY_EXTRA][static::RECORD_KEY_REQUEST] = array_merge(
+                    $data[static::RECORD_KEY_EXTRA][static::RECORD_KEY_REQUEST],
+                    $currentRequestData,
+                );
+
+                return $data;
+            }
+
+            $data[static::RECORD_KEY_EXTRA][static::RECORD_KEY_REQUEST] = $currentRequestData;
 
             return $data;
         }
 
-        $data[static::RECORD_KEY_EXTRA][static::RECORD_KEY_REQUEST] = $currentRequestData;
+        $data->extra[static::RECORD_KEY_REQUEST] = isset($data->extra[static::RECORD_KEY_REQUEST])
+            ? array_merge($data->extra[static::RECORD_KEY_REQUEST], $currentRequestData)
+            : $currentRequestData;
 
         return $data;
     }

@@ -30,6 +30,13 @@ class SwitchUserEventSubscriber extends AbstractPlugin implements EventSubscribe
     protected const COL_STATUS_ACTIVE = 'active';
 
     /**
+     * @uses \SprykerShop\Yves\AgentPage\Expander\SecurityBuilderExpander::ROLE_PREVIOUS_ADMIN
+     *
+     * @var string
+     */
+    protected const ROLE_PREVIOUS_ADMIN = 'ROLE_PREVIOUS_ADMIN';
+
+    /**
      * @return array<string, mixed>
      */
     public static function getSubscribedEvents()
@@ -73,6 +80,41 @@ class SwitchUserEventSubscriber extends AbstractPlugin implements EventSubscribe
 
             $this->getFactory()->createAuditLogger()->addImpersonationEndedAuditLog();
         }
+
+        $this->addPreviousAdminRole($switchUserEvent);
+    }
+
+    /**
+     * Symfony's SwitchUserListener no longer grants `ROLE_PREVIOUS_ADMIN` to the impersonation
+     * token automatically (it now only exposes impersonation via the IS_IMPERSONATOR attribute).
+     * Spryker's own access rules still check for the literal `ROLE_PREVIOUS_ADMIN` role, so it is
+     * restored here to keep that access rule working.
+     */
+    protected function addPreviousAdminRole(SwitchUserEvent $switchUserEvent): void
+    {
+        $token = $switchUserEvent->getToken();
+
+        if (!$token instanceof SwitchUserToken) {
+            return;
+        }
+
+        $user = $token->getUser();
+
+        if ($user === null) {
+            return;
+        }
+
+        if (in_array(static::ROLE_PREVIOUS_ADMIN, $token->getRoleNames(), true)) {
+            return;
+        }
+
+        $switchUserEvent->setToken(new SwitchUserToken(
+            $user,
+            $token->getFirewallName(),
+            [...$token->getRoleNames(), static::ROLE_PREVIOUS_ADMIN],
+            $token->getOriginalToken(),
+            $token->getOriginatedFromUri(),
+        ));
     }
 
     protected function onImpersonationStart(Customer $customer): void
