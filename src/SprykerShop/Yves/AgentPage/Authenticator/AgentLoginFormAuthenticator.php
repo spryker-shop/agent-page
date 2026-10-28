@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -47,6 +48,8 @@ class AgentLoginFormAuthenticator implements AuthenticatorInterface, Authenticat
      * @var string
      */
     protected const PARAMETER_PASSWORD = 'password';
+
+    protected const string PARAMETER_CSRF_TOKEN = '_token';
 
     /**
      * @uses \SprykerShop\Yves\AgentPage\Plugin\Router\AgentPageRouteProviderPlugin::ROUTE_LOGIN
@@ -89,10 +92,13 @@ class AgentLoginFormAuthenticator implements AuthenticatorInterface, Authenticat
 
         /** @var \SprykerShop\Yves\AgentPage\Security\Agent $user */
         $user = $this->userProvider->loadUserByIdentifier($data[static::PARAMETER_EMAIL]);
-        $badges = [$this->multiFactorAuthBadge->enable(
-            $user->getUserTransfer(),
-            $request,
-        )];
+        $badges = [
+            new CsrfTokenBadge(static::PARAMETER_LOGIN_FORM, $data[static::PARAMETER_CSRF_TOKEN] ?? null),
+            $this->multiFactorAuthBadge->enable(
+                $user->getUserTransfer(),
+                $request,
+            ),
+        ];
 
         return new Passport(
             new UserBadge($data[static::PARAMETER_EMAIL], function () use ($user) {

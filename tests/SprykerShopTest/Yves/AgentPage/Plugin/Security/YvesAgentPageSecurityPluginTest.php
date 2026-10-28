@@ -68,6 +68,8 @@ class YvesAgentPageSecurityPluginTest extends Unit
      */
     protected const SERVICE_FLASH_MESSENGER = 'flash_messenger';
 
+    protected const string LOGIN_FORM_NAME = 'loginForm';
+
     /**
      * @var \SprykerShopTest\Yves\AgentPage\AgentPageTester
      */
@@ -128,11 +130,12 @@ class YvesAgentPageSecurityPluginTest extends Unit
         $this->tester->enableSecurityApplicationPlugin();
 
         $container->get(static::SERVICE_SESSION)->start();
+        $csrfToken = $this->tester->addFormCsrfProvider()->getToken(static::LOGIN_FORM_NAME)->getValue();
 
         // Act
         $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
         $httpKernelBrowser->request('get', '/');
-        $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'foo']]);
+        $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'foo', '_token' => $csrfToken]]);
         $httpKernelBrowser->followRedirect();
 
         // Assert
@@ -153,11 +156,12 @@ class YvesAgentPageSecurityPluginTest extends Unit
         $this->tester->enableSecurityApplicationPlugin();
 
         $container->get(static::SERVICE_SESSION)->start();
+        $csrfToken = $this->tester->addFormCsrfProvider()->getToken(static::LOGIN_FORM_NAME)->getValue();
 
         // Act
         $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
         $httpKernelBrowser->request('get', '/');
-        $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'bar']]);
+        $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'bar', '_token' => $csrfToken]]);
         $httpKernelBrowser->followRedirect();
 
         // Assert
@@ -179,11 +183,12 @@ class YvesAgentPageSecurityPluginTest extends Unit
         $this->tester->enableSecurityApplicationPlugin();
 
         $container->get(static::SERVICE_SESSION)->start();
+        $csrfToken = $this->tester->addFormCsrfProvider()->getToken(static::LOGIN_FORM_NAME)->getValue();
 
         // Act
         $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
         $httpKernelBrowser->request('get', '/');
-        $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'foo']]);
+        $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'foo', '_token' => $csrfToken]]);
 
         $httpKernelBrowser->request('get', '/?_switch_user=' . $customerTransfer->getEmail());
         $httpKernelBrowser->followRedirect();
@@ -209,14 +214,62 @@ class YvesAgentPageSecurityPluginTest extends Unit
         $this->tester->enableSecurityApplicationPlugin();
 
         $container->get(static::SERVICE_SESSION)->start();
+        $csrfToken = $this->tester->addFormCsrfProvider()->getToken(static::LOGIN_FORM_NAME)->getValue();
 
         $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
         $httpKernelBrowser->request('get', '/');
-        $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'foo']]);
+        $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'foo', '_token' => $csrfToken]]);
         $httpKernelBrowser->followRedirect();
 
         // Assert
         $this->assertSame(static::ACCESS_MODE_PUBLIC, $httpKernelBrowser->getResponse()->getContent());
+    }
+
+    /**
+     * @dataProvider invalidCsrfTokenDataProvider
+     *
+     * @param array<string, string> $csrfTokenField
+     *
+     * @return void
+     */
+    public function testAgentWithValidCredentialsAndInvalidCsrfTokenCanNotLogin(array $csrfTokenField): void
+    {
+        // Arrange
+        $userTransfer = $this->tester->haveRegisteredAgent(['password' => 'foo']);
+        $this->enableAgentSecurity();
+
+        // Act
+        $httpKernelBrowser = $this->tester->getHttpKernelBrowser();
+        $httpKernelBrowser->request('post', '/agent/login_check', ['loginForm' => ['email' => $userTransfer->getUsername(), 'password' => 'foo'] + $csrfTokenField]);
+        $httpKernelBrowser->followRedirect();
+
+        // Assert
+        $this->assertSame(static::ACCESS_MODE_PUBLIC, $httpKernelBrowser->getResponse()->getContent());
+    }
+
+    /**
+     * @return array<string, array<array<string, string>>>
+     */
+    public function invalidCsrfTokenDataProvider(): array
+    {
+        return [
+            'missing token' => [[]],
+            'empty token' => [['_token' => '']],
+            'invalid token' => [['_token' => 'invalid-token']],
+        ];
+    }
+
+    protected function enableAgentSecurity(): void
+    {
+        $securityPlugin = new YvesAgentPageSecurityPlugin();
+        $securityPlugin->setFactory($this->tester->getFactory());
+        $this->tester->addSecurityPlugin($securityPlugin);
+        $this->tester->addSecurityPlugin(new YvesCustomerPageSecurityPlugin());
+        $this->tester->mockSecurityDependencies();
+        $this->tester->enableSecurityApplicationPlugin();
+
+        $this->tester->getContainer()->get(static::SERVICE_SESSION)->start();
+        $this->tester->addFormCsrfProvider();
     }
 
     protected function createResponse(ContainerInterface $container): Response
