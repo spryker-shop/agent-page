@@ -66,6 +66,8 @@ class AgentLoginForm extends AbstractType
         $this
             ->addEmailField($builder)
             ->addPasswordField($builder);
+
+        $this->executeAgentLoginFormExpanderPlugins($builder, $options);
     }
 
     /**
@@ -103,6 +105,18 @@ class AgentLoginForm extends AbstractType
         ]);
 
         return $this;
+    }
+
+    /**
+     * @param array<string, mixed> $options
+     */
+    protected function executeAgentLoginFormExpanderPlugins(FormBuilderInterface $builder, array $options): FormBuilderInterface
+    {
+        foreach ($this->getFactory()->getAgentLoginFormExpanderPlugins() as $agentLoginFormExpanderPlugin) {
+            $builder = $agentLoginFormExpanderPlugin->expand($builder, $options);
+        }
+
+        return $builder;
     }
 
     protected function createNotBlankConstraint(): NotBlank

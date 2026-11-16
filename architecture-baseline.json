@@ -70,20 +70,6 @@
         "priority": "1"
     },
     {
-        "fileName": "src/SprykerShop/Yves/AgentPage/Plugin/Provider/AgentUserProvider.php",
-        "description": "Method `SprykerShop\\Yves\\AgentPage\\Plugin\\Provider\\AgentUserProvider::refreshUser()` must have return type.",
-        "rule": "ExternalMethodExtensionReturnTypeRule",
-        "ruleset": "Spryker",
-        "priority": "1"
-    },
-    {
-        "fileName": "src/SprykerShop/Yves/AgentPage/Plugin/Provider/AgentUserProvider.php",
-        "description": "Method `SprykerShop\\Yves\\AgentPage\\Plugin\\Provider\\AgentUserProvider::supportsClass()` must have return type.",
-        "rule": "ExternalMethodExtensionReturnTypeRule",
-        "ruleset": "Spryker",
-        "priority": "1"
-    },
-    {
         "fileName": "src/SprykerShop/Yves/AgentPage/Plugin/Subscriber/SwitchUserEventSubscriber.php",
         "description": "Method `SprykerShop\\Yves\\AgentPage\\Plugin\\Subscriber\\SwitchUserEventSubscriber::getSubscribedEvents()` must have return type.",
         "rule": "ExternalMethodExtensionReturnTypeRule",

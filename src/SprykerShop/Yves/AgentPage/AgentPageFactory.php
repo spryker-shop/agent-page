@@ -290,4 +290,12 @@ class AgentPageFactory extends AbstractFactory
     {
         return $this->getProvidedDependency(AgentPageDependencyProvider::CLIENT_STORE);
     }
+
+    /**
+     * @return list<\SprykerShop\Yves\AgentPageExtension\Dependency\Plugin\AgentLoginFormExpanderPluginInterface>
+     */
+    public function getAgentLoginFormExpanderPlugins(): array
+    {
+        return $this->getProvidedDependency(AgentPageDependencyProvider::PLUGINS_AGENT_LOGIN_FORM_EXPANDER);
+    }
 }

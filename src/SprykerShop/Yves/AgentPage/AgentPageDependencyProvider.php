@@ -109,6 +109,8 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
      */
     public const CLIENT_STORE = 'CLIENT_STORE';
 
+    public const string PLUGINS_AGENT_LOGIN_FORM_EXPANDER = 'PLUGINS_AGENT_LOGIN_FORM_EXPANDER';
+
     public function provideDependencies(Container $container): Container
     {
         $container = parent::provideDependencies($container);
@@ -127,6 +129,7 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         $container = $this->addAgentUserAuthenticationHandlerPlugins($container);
         $container = $this->addSessionClient($container);
         $container = $this->addStoreClient($container);
+        $container = $this->addAgentLoginFormExpanderPlugins($container);
 
         return $container;
     }
@@ -295,5 +298,22 @@ class AgentPageDependencyProvider extends AbstractBundleDependencyProvider
         });
 
         return $container;
+    }
+
+    protected function addAgentLoginFormExpanderPlugins(Container $container): Container
+    {
+        $container->set(static::PLUGINS_AGENT_LOGIN_FORM_EXPANDER, function () {
+            return $this->getAgentLoginFormExpanderPlugins();
+        });
+
+        return $container;
+    }
+
+    /**
+     * @return list<\SprykerShop\Yves\AgentPageExtension\Dependency\Plugin\AgentLoginFormExpanderPluginInterface>
+     */
+    protected function getAgentLoginFormExpanderPlugins(): array
+    {
+        return [];
     }
 }
